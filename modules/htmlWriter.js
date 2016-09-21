@@ -26,7 +26,8 @@
     fileName: null,
     boilerplate: null,
     $: null, //the JQuery object for the html page,
-    html: null //the file's html
+    html: null, //the file's html
+    htmlToAppend: null
   };
 
   /**
@@ -44,9 +45,9 @@
   * @param src {data} - the output from fs.readFileSync
   * @return $ - returns a JQuery object (Cheerio)
   **/
-  function getJQueryObject() {
-    console.log('getJQueryObject()');
-    file.$ = cheerio.load(file.path+file.fileName);
+  function getJQueryObject(path) {
+    console.log('getJQueryObject(): '+path);
+    file.$ = cheerio.load(fs.readFileSync(path));
   }
 
   /**
@@ -68,12 +69,11 @@
     }
   }
 
-  function append(html) {
-    console.log('append(html)');
-    let body = $('body');
-    body.append(html);
-    file.html = $.html();
-    resolve();
+  function appendHtml() {
+    console.log('append(html): \"'+file.htmlToAppend+'\"');
+    let body = file.$('body');
+    body.append(file.htmlToAppend);
+    file.html = file.$.html();
   }
 
 
@@ -85,10 +85,14 @@
     * Gets the boilerplate file if one is passed
     * @param fileName {String} - output html file, i.e. 'myFile.html'
     * @param path {String} - '/myHtmlFiles/A_folder/'
-    * @param boilerplate {String} - a boilerplate template to initialize myFile.html, i.e. 'html5boilerplate.html'
+    * @param boilerplate {String} - a boilerplate path to initialize myFile.html, i.e. 'html5boilerplate.html'
     * if boilerplate is null, no boilerplate will be used
     */
     init(fileName, path, boilerplate) {
+
+      //clear cache
+      file.htmlToAppend = null;
+      file.html = null;
 
       //assign values to singleton
       file.fileName = fileName;
@@ -109,10 +113,26 @@
       return initPromise;
     },
     append(html) {
+      file.htmlToAppend = html;
       let appendPromise = new Promise(function(resolve, reject) {
         try {
-          getJQueryObject();
-          append(html);
+          //check if html file already exists, if it does
+          if(fs.existsSync(file.path+'/'+file.fileName)) {
+            console.log('file already exists');
+            getJQueryObject(file.path+'/'+file.fileName);
+            appendHtml();
+          }
+          //if html file doesn't exists, use boilerplate if not null
+          else if (file.boilerplate !== null) {
+            console.log('getting boilerplate');
+            getJQueryObject(file.boilerplate);
+            appendHtml();
+          }
+          //if boilerplate null then append as is
+          else {
+            console.log('null boilerplate');
+            file.html = file.htmlToAppend;
+          }
           fs.writeFileSync(file.path+'/'+file.fileName, file.html);
           resolve(file);
         }
