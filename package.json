@@ -1,14 +1,14 @@
 {
-  "name": "componentFlow-htmlWriter-node_module",
-  "version": "0.0.1",
-  "private": true,
+  "name": "componentFlow-htmlWriter",
+  "version": "0.0.8",
   "author": "Ron Itelman",
   "license": "MIT",
+  "bugs":"https://github.com/RonItelman/componentFlow-htmlWriter-node_module/issues",
   "scripts": {
     "start": "nodemon ./bin/www"
   },
   "engines": {
-    "node": "6.2.2"
+    "node": ">=6.2.2"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
