@@ -10,19 +10,23 @@ Steps:
 Template engine is Jade.
 
 # Usage
-###Please make sure you are using Node 6.2.2
+### Please make sure you are using Node 6.2.2
+### Requires a shell scripting environment is installed (bash, etc)
 
 npm install htmlWriter-node_module
 
+
 the module is located at /modules/htmlWriter.js
 
-let htmlWriter = require('htmlWriter');
+    let htmlWriter = require('htmlWriter');
 
     // sets the filename, creates the folder, loads an html boilerplate
-    htmlWriter.init('filename', 'path', 'boilerplate');
+    // if the file already exists this will be ignored
+    // if no boilerplate is to be used pass null for boilerplate
+    htmlWriter.init('filename.html', 'path', 'boilerplate.html');
 
-    // appends content and writes file
-    htmlWriter.append(body, css, js);
+    // appends html to body and writes file if it didn't already exist
+    htmlWriter.append(html);
 
 # Dependencies
 
@@ -32,3 +36,4 @@ let htmlWriter = require('htmlWriter');
 * [gulp](https://www.npmjs.com/package/gulp) - a streaming build system
 * [browser-sync](https://www.npmjs.com/package/browser-sync) - Live CSS Reload &amp; Browser Syncing
 * [run-sequence](https://www.npmjs.com/package/run-sequence) - Run a series of dependent gulp tasks in order
+* [shelljs](https://www.npmjs.com/package/shelljs) - Portable Unix shell commands for Node.js

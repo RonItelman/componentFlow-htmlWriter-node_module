@@ -18,139 +18,109 @@
 
   let cheerio = require('cheerio');
   let fs = require('fs');
+  let shell = require('shelljs');
+
+  let file = {
+    src: null, //the buffer source from fs.readFileSync
+    path: null,
+    fileName: null,
+    boilerplate: null,
+    $: null, //the JQuery object for the html page,
+    html: null //the file's html
+  };
 
   /**
   * @param path {String} the path of the folder which will be created if it does not exist
   **/
-  function createFolder(path) {
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path);
-      console.log('path created: '+fs.existsSync(path));
-      resolve(path);
+  function createFolder() {
+    console.log('creating folder(s)');
+    if (!fs.existsSync(file.path)) {
+      shell.mkdir('-p', file.path);
+      console.log('file.path created: '+fs.existsSync(file.path));
     }
   }
 
+  /**
+  * @param src {data} - the output from fs.readFileSync
+  * @return $ - returns a JQuery object (Cheerio)
+  **/
+  function getJQueryObject() {
+    console.log('getJQueryObject()');
+    file.$ = cheerio.load(file.path+file.fileName);
+  }
 
-  function append(body, css, js, $) {
-    // console.log('appendComponent()');
-    let head = $('head');
-    let script = $('<script type="text/javascript"></script>');
+  /**
+  * @param fileName {String} - output html file, i.e. 'myFile.html'
+  * @param path {String} - '/myHtmlFiles/A_folder/'
+  * @param boilerplate {String} - a boilerplate template to initialize myFile.html, i.e. 'html5boilerplate.html'
+  * if boilerplate is null, no boilerplate will be used
+  * @return src - if the output fileName exists, it will return the readFileSync output of the existing file, otherwise it will return the readFileSync output of the boilerplate
+  **/
+  function getSourceFile() {
+    let promise = new Promise(function(resolve, reject) {
+      if (!fs.existsSync(file.path+file.fileName) && file.boilerplate !== null) {
+        file.src = fs.readFileSync(file.boilerplate);
+      }
+      else if (file.boilerplate !== null) {
+        file.src = fs.readFileSync(file.path+file.fileName);
+      }
+      else {
+        file.src = null;
+      }
+      resolve();
+      return promise;
+    });
+  }
+
+  function append(html) {
+    console.log('append(html)');
     let body = $('body');
-    let style = $('<style type="text/css"></style>');
-    let html = $(aComponent.html);
-    script.append(aComponent.js);
-    body.append(script);
-    style.append(aComponent.css);
-    head.append(style);
-    body.prepend(html);
-    return $.html();
-  }
-
-  function getTemplateHtml(options) {
-    // console.log('options:');
-    // console.log(options);
-    let file;
-    var promise = new Promise(function resolver(resolve, reject) {
-      //no option selected
-      // if (options.length === 0) {
-      //   console.log('getting html');
-      //   file = fs.readFileSync('./componentTemplate/responsive/index.html');
-      //   resolve(file);
-      // }
-      // else if (options.jquery == 'true') {
-      //   console.log('jquery');
-      //   file = fs.readFileSync('./componentTemplate/responsive/index.html');
-      //   resolve(file);
-      // }
-      // else {
-      //   console.log('rejected');
-      //   reject(file);
-      // }
-      file = fs.readFileSync('./componentTemplate/responsive/index.html');
-      resolve(file);
-    });
-    return promise;
-
-  }
-
-  //gets an html template and inserts the component's html, js, and css
-  function getHtml(aComponent) {
-    console.log('getHtml aComponent: ');
-    // console.log(aComponent);
-    // let promise = getTemplateHtml(aComponent.options);
-    console.log('pre then');
-    promise.then(function(file) {
-      console.log('in promise');
-      //append code
-      let $ = cheerio.load(file);
-
-
-      console.log('getHtml()');
-      // console.log(html);
-      resolve(html);
-    });
-    promise.catch(function(e) {
-      console.log(e);
-      return null;
-    });
-    return promise;
+    body.append(html);
+    file.html = $.html();
+    resolve();
   }
 
 
 
   module.exports = {
-    writeFile(aComponent, uid, selected_repository) {
-      var promise = new Promise(function(resolve, reject) {
-        createFolder(path);
+
+    /**
+    * Creates the folder path
+    * Gets the boilerplate file if one is passed
+    * @param fileName {String} - output html file, i.e. 'myFile.html'
+    * @param path {String} - '/myHtmlFiles/A_folder/'
+    * @param boilerplate {String} - a boilerplate template to initialize myFile.html, i.e. 'html5boilerplate.html'
+    * if boilerplate is null, no boilerplate will be used
+    */
+    init(fileName, path, boilerplate) {
+
+      //assign values to singleton
+      file.fileName = fileName;
+      file.path = path;
+      file.boilerplate = boilerplate;
+
+      var initPromise = new Promise(function(resolve, reject) {
+        createFolder();
+        resolve();
       }).then(function (){
-        template = fs.readFileSync('./componentTemplate/responsive/index.html');
-      }).then(function (){
-        generateHtml();
-      }).then(function (){
-        fs.writeFileSync(path, html);
+        getSourceFile();
+      });
+      return initPromise;
+    },
+    append(html) {
+      //create the folders, a promise is returned
+      let appendPromise = new Promise(function(resolve, reject) {
+        getJQueryObject();
+      }).then(function() {
+        append(html);
+      }).then(function() {
+        fs.writeFileSync(file.path+file.fileName, file.html);
+        resolve();
       }).catch(function(e) {
         console.log('an error has occurred: '+e);
         reject(e);
       });
-      return promise;
-
-      let html,
-        htmlPath,
-        jadePath,
-        jadeContent,
-        template,
-        $;
-      //create the folders, a promise is returned
-      let promise = createFolders(aComponent, uid, selected_repository);
-      promise.then(function(filePath) {
-        // console.log('assign file path');
-        htmlPath = filePath+'.html';
-        jadePath = filePath+'.jade';
-      }).then(function() {
-        // console.log('read file');
-        template = fs.readFileSync('./componentTemplate/responsive/index.html');
-      }).then(function() {
-        // console.log('load template into cheerio');
-        $ = cheerio.load(template);
-        html = $.html();
-      }).then(function() {
-        // console.log('append');
-        html = appendComponent(aComponent, $);
-        jadeContent = 'include ./'+aComponent.name+'-'+aComponent.cid+'.html';
-        // console.log(html);
-      }).then(function() {
-        // console.log('write file');
-        // console.log(htmlPath);
-        // console.log(html);
-        fs.writeFileSync(htmlPath, html);
-        fs.writeFileSync(jadePath, jadeContent);
-        resolve();
-      });
-      return promise;
-      //get the html
-
-
-
+      return appendPromise;
     }
   };
 
