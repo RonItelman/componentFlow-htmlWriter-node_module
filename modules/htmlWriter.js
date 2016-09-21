@@ -57,19 +57,15 @@
   * @return src - if the output fileName exists, it will return the readFileSync output of the existing file, otherwise it will return the readFileSync output of the boilerplate
   **/
   function getSourceFile() {
-    let promise = new Promise(function(resolve, reject) {
-      if (!fs.existsSync(file.path+file.fileName) && file.boilerplate !== null) {
-        file.src = fs.readFileSync(file.boilerplate);
-      }
-      else if (file.boilerplate !== null) {
-        file.src = fs.readFileSync(file.path+file.fileName);
-      }
-      else {
-        file.src = null;
-      }
-      resolve();
-      return promise;
-    });
+    if (!fs.existsSync(file.path+'/'+file.fileName) && file.boilerplate !== null) {
+      file.src = fs.readFileSync(file.boilerplate);
+    }
+    else if (file.boilerplate !== null) {
+      file.src = fs.readFileSync(file.path+'/'+file.fileName);
+    }
+    else {
+      file.src = null;
+    }
   }
 
   function append(html) {
@@ -100,25 +96,30 @@
       file.boilerplate = boilerplate;
 
       var initPromise = new Promise(function(resolve, reject) {
-        createFolder();
-        resolve();
-      }).then(function (){
-        getSourceFile();
+        try {
+          createFolder();
+          getSourceFile();
+          resolve(file);
+        }
+        catch (e) {
+          console.log('init ERROR: '+e);
+          reject(e);
+        }
       });
       return initPromise;
     },
     append(html) {
-      //create the folders, a promise is returned
       let appendPromise = new Promise(function(resolve, reject) {
-        getJQueryObject();
-      }).then(function() {
-        append(html);
-      }).then(function() {
-        fs.writeFileSync(file.path+file.fileName, file.html);
-        resolve();
-      }).catch(function(e) {
-        console.log('an error has occurred: '+e);
-        reject(e);
+        try {
+          getJQueryObject();
+          append(html);
+          fs.writeFileSync(file.path+'/'+file.fileName, file.html);
+          resolve(file);
+        }
+        catch(e) {
+          console.log('append ERROR: '+e);
+          reject(e);
+        }
       });
       return appendPromise;
     }
