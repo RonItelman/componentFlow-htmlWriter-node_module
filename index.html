@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Htmlwriter-node module : This micro module creates and returns a Promise object after creating a folder if it doesn&#39;t exists, creating an html doc and then inserting content using Cheerio.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Htmlwriter-node module</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/RonItelman/htmlWriter-node_module">View on GitHub</a>
+
+          <h1 id="project_title">Htmlwriter-node module</h1>
+          <h2 id="project_tagline">This micro module creates and returns a Promise object after creating a folder if it doesn&#39;t exists, creating an html doc and then inserting content using Cheerio.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/RonItelman/htmlWriter-node_module/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/RonItelman/htmlWriter-node_module/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a id="this-micro-module-creates-and-returns-a-promise-object-after-creating-a-folder-if-it-doesnt-exists-creating-an-html-doc-and-then-inserting-content-using-cheerio" class="anchor" href="#this-micro-module-creates-and-returns-a-promise-object-after-creating-a-folder-if-it-doesnt-exists-creating-an-html-doc-and-then-inserting-content-using-cheerio" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>This micro module creates and returns a Promise object after creating a folder if it doesn't exists, creating an html doc and then inserting content using Cheerio.</h2>
+
+<p>Steps:</p>
+
+<ol>
+<li>Checks if a path to a folder exists, and if not, creates one.</li>
+<li>Uses Cheerio to load an html boilerplate and append content.</li>
+<li>Writes the file</li>
+<li>Returns a promise that's resolved if successful, or returns a rejected promise if an error was thrown.
+Usage:
+let htmlWriter = require('htmlWriter');
+htmlWriter.init('my_path'); // creates the folder, loads the html boilerplate
+htmlWriter.append(content); // appends content and writes file</li>
+</ol>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Htmlwriter-node module maintained by <a href="https://github.com/RonItelman">RonItelman</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

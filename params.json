@@ -1,0 +1,6 @@
+{
+  "name": "Htmlwriter-node module",
+  "tagline": "This micro module creates and returns a Promise object after creating a folder if it doesn't exists, creating an html doc and then inserting content using Cheerio.",
+  "body": "## This micro module creates and returns a Promise object after creating a folder if it doesn't exists, creating an html doc and then inserting content using Cheerio.\r\n Steps:\r\n 1. Checks if a path to a folder exists, and if not, creates one.\r\n 2. Uses Cheerio to load an html boilerplate and append content.\r\n 3. Writes the file\r\n 4. Returns a promise that's resolved if successful, or returns a rejected promise if an error was thrown.\r\n Usage:\r\n let htmlWriter = require('htmlWriter');\r\n htmlWriter.init('my_path'); // creates the folder, loads the html boilerplate\r\n htmlWriter.append(content); // appends content and writes file",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
