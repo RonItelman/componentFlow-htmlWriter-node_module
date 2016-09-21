@@ -151,28 +151,6 @@
 
 
 
-      // let htmlFilePath = filePath+'.html';
-      // let jadeFilePath = filePath+'.jade';
-      //
-      // let promise2 = promise.then(function(html) {
-      //   //write the html component filePath
-      //   fs.writeFile(htmlFilePath, html, (err => {
-      //     // console.log('writing '+htmlFilePath+'\n'+html);
-      //     // console.log('writing html file');
-      //     if (err) throw err;
-      //   }));
-      //
-      // }).then(function() {
-      //   // console.log('writing jade file');
-      //   //write the jade component filePath to include html file
-      //   fs.writeFile(jadeFilePath, 'include '+aComponent.name+'.html', (err => {
-      //     if (err) throw err;
-      //   }));
-      //
-      // });
-      // return promise2;
-
-
     }
   };
 

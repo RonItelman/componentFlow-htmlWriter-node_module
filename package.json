@@ -2,6 +2,7 @@
   "name": "htmlWriter-node_module",
   "version": "0.0.1",
   "private": true,
+  "author":"Ron Itelman",
   "scripts": {
     "start": "nodemon ./bin/www"
   },
@@ -21,6 +22,6 @@
     "moment": "^2.14.1",
     "nodemon": "^1.9.2",
     "run-sequence": "^1.2.1",
-    "cheerio": "^0.20.0",
+    "cheerio": "^0.20.0"
   }
 }
