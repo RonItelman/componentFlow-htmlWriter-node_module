@@ -1,8 +1,9 @@
 {
-  "name": "htmlWriter-node_module",
+  "name": "componentFlow-htmlWriter-node_module",
   "version": "0.0.1",
   "private": true,
   "author": "Ron Itelman",
+  "license": "MIT",
   "scripts": {
     "start": "nodemon ./bin/www"
   },

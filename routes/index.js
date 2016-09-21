@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 
   let promise1 = htmlWriter.init('example.html', 'htmlExamples/my_example', './boilerplates/html/index.html');
   promise1.then(function(file) {
-    let promise2 = htmlWriter.append('<div>'+moment().format("MM-DD-YYYY")+'</div>');
+    let promise2 = htmlWriter.append('<span>'+moment().format("MM-DD-YYYY")+'</span>');
     promise2.then(function() {
       output += JSON.stringify(file.html);
       res.render('index', { output: file.html });
