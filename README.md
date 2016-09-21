@@ -18,11 +18,11 @@ the module is located at /modules/htmlWriter.js
 
 let htmlWriter = require('htmlWriter');
 
-// sets the filename, creates the folder, loads an html boilerplate
-htmlWriter.init('filename', 'path', 'boilerplate');
+    // sets the filename, creates the folder, loads an html boilerplate
+    htmlWriter.init('filename', 'path', 'boilerplate');
 
-// appends content and writes file
-htmlWriter.append(body, css, js);
+    // appends content and writes file
+    htmlWriter.append(body, css, js);
 
 # Dependencies
 
